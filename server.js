@@ -7,6 +7,8 @@ const { elasticItemsConnection } = require("./elastic");
 require("dns");
 require("dnscache")({ "enable": true, "ttl": 300, "cachesize": 1000 });
 require("dotenv").config({ path: path.resolve(__dirname, ".env") });
+const swaggerUi = require("swagger-ui-express");
+const swaggerSpec = require("./config/swagger");
 
 const { getItems } = require("./mongoServer");
 
@@ -15,6 +17,8 @@ const app = express();
 if (process.env.NODE_ENV === "DEVELOPMENT") {
     app.use(morgan("dev"));
 }
+
+app.use("/swagger", swaggerUi.serve, swaggerUi.setup(swaggerSpec, false, { docExpansion: "none" }));
 
 const SparkMD5 = require("spark-md5");
 const hashing = (body) => ({
@@ -41,6 +45,35 @@ async function searchPhrase (connection, data) {
     return await connection.client.search(myjson);
 }
 
+/**
+ * @swagger
+ * /items/search:
+ *   get:
+ *     tags:
+ *       - Search Items
+ *     summary: Search Items
+ *     description: 'Search Items'
+ *     operationId: getSystemData
+ *     consumes:
+ *       - application/json
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: q
+ *         in: query
+ *         description: query string
+ *         required: true
+ *     responses:
+ *       '200':
+ *         description: Successful operation
+ *         schema:
+ *            $ref: '#/definitions/response'
+ *
+ *       '400':
+ *         description: Missed Parameter(s)
+ *         schema:
+ *            $ref: '#/definitions/responseError'
+ */
 app.get("/items/search", async (req, res) => {
     let response = {
         "status": "OK",
@@ -75,7 +108,25 @@ app.get("/items/search", async (req, res) => {
             items: items || []
         });
 });
-
+/**
+ * @swagger
+ * /:
+ *   get:
+ *     tags:
+ *       - Bad URL
+ *     summary: Bad URL
+ *     description: 'Wrong URL'
+ *     operationId: getSystemData
+ *     consumes:
+ *       - application/json
+ *     produces:
+ *       - application/json
+ *     responses:
+ *       '404':
+ *         description: Wrong URL
+ *         schema:
+ *            $ref: '#/definitions/responseError'
+ */
 app.use("/", async (req, res) => {
     res.status(404).send({
         "message": "Bad request"
