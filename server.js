@@ -73,7 +73,13 @@ async function searchPhrase (connection, data) {
  *         description: Missed Parameter(s)
  *         schema:
  *            $ref: '#/definitions/responseError'
+ *
+ *       '404':
+ *         description: Wrong URL
+ *         schema:
+ *            $ref: '#/definitions/responseError'
  */
+
 app.get("/items/search", async (req, res) => {
     let response = {
         "status": "OK",
@@ -108,25 +114,7 @@ app.get("/items/search", async (req, res) => {
             items: items || []
         });
 });
-/**
- * @swagger
- * /:
- *   get:
- *     tags:
- *       - Bad URL
- *     summary: Bad URL
- *     description: 'Wrong URL'
- *     operationId: getSystemData
- *     consumes:
- *       - application/json
- *     produces:
- *       - application/json
- *     responses:
- *       '404':
- *         description: Wrong URL
- *         schema:
- *            $ref: '#/definitions/responseError'
- */
+
 app.use("/", async (req, res) => {
     res.status(404).send({
         "message": "Bad request"
