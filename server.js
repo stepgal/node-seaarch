@@ -69,6 +69,11 @@ async function searchPhrase (connection, data) {
  *         schema:
  *            $ref: '#/definitions/response'
  *
+ *       '400':
+ *         description: Missed Parameter(s)
+ *         schema:
+ *            $ref: '#/definitions/responseError'
+ *
  *       '404':
  *         description: Wrong URL
  *         schema:

@@ -13,13 +13,10 @@ RUN npm install
 
 EXPOSE 3003
 
-#CMD node server.js
-
 RUN echo "git fetch" >> run.sh
-RUN echo "git pull origin master clone" | tee -a run.sh
+RUN echo "git pull origin master" | tee -a run.sh
 RUN echo "npm install" | tee -a run.sh
-# RUN echo "node server.js" | tee -a run.sh
+RUN echo "node server.js" | tee -a run.sh
 RUN chmod 777 run.sh
 
 CMD ./run.sh
-CMD node server.js
