@@ -1,3 +1,6 @@
+[![Build Status](https://travis-ci.com/stepgal/node-search.svg?branch=master)](https://travis-ci.com/stepgal/node-search)
+
+
 # Search Items API
 
 ## Getting Started
