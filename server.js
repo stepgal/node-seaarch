@@ -118,3 +118,5 @@ app.use("/", async (req, res) => {
 });
 
 app.listen(process.env.SERVER_PORT || 3003);
+
+module.exports = app;

@@ -1,0 +1,24 @@
+sudo: required
+
+services:
+  - docker
+
+before_install:
+  - docker build -f dockerfile.dev -t sgaloyan/node_search_dev .
+
+script:
+  - docker run sgaloyan/node_search_dev
+
+after_success:
+  - docker stop container sgaloyan/node_search_dev
+
+deploy:
+  provider: elasticbeanstalk
+  access_key_id: $ACCESS_KEY
+  secret_access_key: $SECRET_ACCESS_KEY
+  region: us-east-2
+  app: "node-search-docker"
+  env: "NodeSearchDocker-env"
+  bucket_name: "s3-node-search-docker"
+  on: master
+
